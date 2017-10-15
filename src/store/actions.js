@@ -3,3 +3,7 @@ export const inputEntered = value => ({
   value,
 });
 
+export const sendToOutput = value => ({  
+  type: 'ADD_OUTPUT',
+  value,
+});
