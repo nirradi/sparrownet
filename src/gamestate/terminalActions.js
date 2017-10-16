@@ -12,3 +12,13 @@ export const sendToOutput = (value, returnInput) => ({
 export const returnInput = () => ({  
   type: 'RETURN_INPUT'
 });
+
+export const pushShell = (commands, prompt) => ({  
+  type: 'PUSH_SHELL',
+  commands,
+  prompt
+});
+
+export const popShell = () => ({  
+  type: 'POP_SHELL',
+});

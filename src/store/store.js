@@ -7,11 +7,9 @@ import {
 
 import thunk from 'redux-thunk';
 
-import terminal from '../gamestate/terminal.js';
 import gameState from '../gamestate/gameState.js';
 
 let reducers = combineReducers({
-    terminal,
     gameState
 });
 

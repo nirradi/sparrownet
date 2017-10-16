@@ -2,8 +2,7 @@ import Terminal from '../components/Terminal';
 import { connect } from 'react-redux';
 import commandEngine from '../gamestate/commandEngine';
 const mapStateToProps = (state, ownProps) => ({
-    terminal: state.terminal,
-    gameState: state.gameState
+    terminal: state.gameState
 });
 
 

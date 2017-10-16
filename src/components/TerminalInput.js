@@ -17,7 +17,8 @@ class TerminalInput extends React.Component {
             this.props.onEnter(e.target.value); 
             this.setState({ 
                 commandHistory: this.state.commandHistory.concat(e.target.value),
-                commandHistoryPosition: this.state.commandHistory.length + 1
+                commandHistoryPosition: this.state.commandHistory.length + 1,
+                value: '',
             });
         }
         
@@ -59,15 +60,11 @@ class TerminalInput extends React.Component {
     onChange(e) {
         this.setState({value: e.target.value});
     }
-    
-    componentWillReceiveProps(nextProps) {
-        this.setState({value: nextProps.inputValue});
-    }
-    
+
     render() {
         return (
             <div className='terminal-input'>
-                > <input ref={input => input && input.focus()} disabled={this.props.disabled} value={this.state.value} onKeyDown={this.keyPress.bind(this)} onChange={this.onChange.bind(this)}/>
+                {this.props.prompt}<input ref={input => input && input.focus()} disabled={this.props.disabled} value={this.state.value} onKeyDown={this.keyPress.bind(this)} onChange={this.onChange.bind(this)}/>
             </div>
         );
     }
@@ -78,6 +75,7 @@ TerminalInput.defaultProps = {
     inputDisabled: false, 
     availableCommands: [],
     commandHistory: [],
+    prompt: '>'
 }
 
 export default TerminalInput;

@@ -9,10 +9,11 @@ class Terminal extends Component {
             <div className="terminal">
                     <TerminalOutput value={this.props.terminal.output}/>
                     <TerminalInput 
+                        prompt={this.props.terminal.prompt}
                         disabled={this.props.terminal.inputDisabled} 
                         inputValue={this.props.terminal.inputValue} 
                         onEnter={this.props.inputEntered} 
-                        availableCommands={Object.keys(this.props.gameState.availableCommands)}
+                        availableCommands={Object.keys(this.props.terminal.availableCommands)}
                     />
                 </div>
         );

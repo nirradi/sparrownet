@@ -1,6 +1,8 @@
 .terminal {
     background-color: $terminal-background;
     height:100%;
+    white-space: pre-line;
+    overflow:auto;
     font-family: "Courier New", Courier, monospace
 }
 

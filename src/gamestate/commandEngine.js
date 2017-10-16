@@ -2,25 +2,58 @@ import store from '../store/store' ;
 
 import {  
     inputEntered,
-    sendToOutput
+    sendToOutput,
+    pushShell,
+    popShell,
+    returnInput
 } from './terminalActions';
 
 
-export default {
-    runCommand: function(command) {
-        let self = this;
-        store.dispatch(inputEntered(command));
-        
-        if (store.getState().gameState.availableCommands.hasOwnProperty(command))
-        {
-            setTimeout(store.getState().gameState.availableCommands[command].func.bind(self), 1);
-        }
-        else {
-            store.dispatch(sendToOutput("bad command"));    
-        }
+var commandEngine = {
+    
+    start: function(initialState) {
+        store.dispatch(pushShell(initialState.rootCommands, '> '))
     },
     
-    sendToOutput: function(value) {
+    sendToOutput: function(value, disable=true) {
         store.dispatch(sendToOutput(value));
+    },
+    
+    runCommand: function(fullCommand) {
+        let command = fullCommand.split(' ')[0];
+        store.dispatch(inputEntered(fullCommand));
+        let availableCommands = store.getState().gameState.availableCommands;
+        if (command === '') {
+            store.dispatch(returnInput());
+        }
+        else if (command === 'help')
+        {
+            commandEngine.showHelp(availableCommands)
+        }
+        else if (availableCommands.hasOwnProperty(command))
+        {
+            setTimeout((availableCommands[command].func.bind(commandEngine))(fullCommand), 1);
+        }
+        else {
+            commandEngine.sendToOutput("bad command");    
+        }
+    },
+   
+    showHelp: function(availableCommands) {
+        for (var availableCommand in availableCommands) {
+            if (availableCommands.hasOwnProperty(availableCommand)) {
+                commandEngine.sendToOutput(availableCommand + " - " + availableCommands[availableCommand].description);        
+            }
+        };
+    },
+    
+    pushShell: function(commands, prompt) {
+        store.dispatch(pushShell(commands, prompt));
+    },
+    
+    popShell: function() {
+        store.dispatch(popShell());
     }
 }
+
+export default commandEngine;
