@@ -3,9 +3,10 @@ export const inputEntered = value => ({
   value,
 });
 
-export const sendToOutput = value => ({  
+export const sendToOutput = (value, returnInput) => ({  
   type: 'ADD_OUTPUT',
   value,
+  returnInput: returnInput === undefined ? true : false
 });
 
 export const returnInput = () => ({  

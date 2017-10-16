@@ -1,8 +1,9 @@
+import commandEngine from './commandEngine';
 
 export default {
     availableCommands: {
         'help':  function () {
-            this.sendToOutput('hahahaha');
+            commandEngine.sendToOutput('hahahaha');
         }
     }
 }

@@ -1,20 +1,10 @@
-import commandEngine from './commandEngine';
+
 
 const terminal = (state = { history: ['there is no history'], input: '', inputDisabled: false}, action) => {  
     switch (action.type) {
         case 'INPUT_ENTERED':
             let addHistory = [action.value];
             let inputDisabled = true;
-            let commandStatus = commandEngine.runCommand(action.value)
-            if (!commandStatus)
-            {
-                if (action.value)
-                {
-                    addHistory.push("bad command");
-                }
-                
-                inputDisabled = false;
-            }
 
             return {
                 ...state,
@@ -26,6 +16,7 @@ const terminal = (state = { history: ['there is no history'], input: '', inputDi
             return {
                 ...state,
                 history: state.history.concat(action.value),
+                inputDisabled: !action.returnInput
             }
         case 'RETURN_INPUT':
             return{

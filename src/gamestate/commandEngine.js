@@ -1,25 +1,24 @@
 import store from '../store/store' ;
 
 import {  
-  sendToOutput,
-  returnInput
-} from '../store/actions';
+    inputEntered,
+    sendToOutput
+} from './actions';
 
 
 export default {
     runCommand: function(command) {
+        let self = this;
+        store.dispatch(inputEntered(command));
+        
         if (store.getState().gameState.availableCommands.hasOwnProperty(command))
         {
-            let self = this;
-            setTimeout(function() {
-                (store.getState().gameState.availableCommands[command].bind(self))();
-                store.dispatch(returnInput());
-            }, 1);
-            return true;
             
+            setTimeout(store.getState().gameState.availableCommands[command].bind(self), 1);
         }
-        else
-            return false;
+        else {
+            store.dispatch(sendToOutput("bad command"));    
+        }
     },
     
     sendToOutput: function(value) {
