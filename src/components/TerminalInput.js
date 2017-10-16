@@ -67,7 +67,7 @@ class TerminalInput extends React.Component {
     render() {
         return (
             <div className='terminal-input'>
-                > <input disabled={this.props.disabled} value={this.state.value} onKeyDown={this.keyPress.bind(this)} onChange={this.onChange.bind(this)}/>
+                > <input ref={input => input && input.focus()} disabled={this.props.disabled} value={this.state.value} onKeyDown={this.keyPress.bind(this)} onChange={this.onChange.bind(this)}/>
             </div>
         );
     }
