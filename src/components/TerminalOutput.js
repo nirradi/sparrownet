@@ -1,14 +1,15 @@
 import React from 'react';
 
+
 class TerminalOutput extends React.Component {
     
     render() {
         let displayItems = [];
-        this.props.history.forEach(function(historyItem) {
-            displayItems.push(<div>{historyItem}</div>)
+        this.props.value.forEach(function(outputItem) {
+            displayItems.push(<div>{outputItem}</div>)
         })
         return (
-            <div>
+            <div className='terminal-output'>
                 {displayItems}
             </div>
         );
@@ -16,7 +17,7 @@ class TerminalOutput extends React.Component {
 }
 
 TerminalOutput.defaultProps = {
-    history: ['the history is empty']
+    value: ['-------------']
 };
     
 

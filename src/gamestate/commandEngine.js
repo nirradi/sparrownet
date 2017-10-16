@@ -3,7 +3,7 @@ import store from '../store/store' ;
 import {  
     inputEntered,
     sendToOutput
-} from './actions';
+} from './terminalActions';
 
 
 export default {

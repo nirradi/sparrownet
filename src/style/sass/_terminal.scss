@@ -1,0 +1,14 @@
+.terminal {
+    background-color: $terminal-background;
+    height:100%;
+    font-family: "Courier New", Courier, monospace
+}
+
+.terminal-input {
+    width:100%;
+    color:$terminal-text;
+}
+
+.terminal-output {
+    color:$terminal-text;
+}
