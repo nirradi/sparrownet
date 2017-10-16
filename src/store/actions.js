@@ -7,3 +7,7 @@ export const sendToOutput = value => ({
   type: 'ADD_OUTPUT',
   value,
 });
+
+export const returnInput = () => ({  
+  type: 'RETURN_INPUT'
+});

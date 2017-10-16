@@ -27,6 +27,11 @@ const terminal = (state = { history: ['there is no history'], input: '', inputDi
                 ...state,
                 history: state.history.concat(action.value),
             }
+        case 'RETURN_INPUT':
+            return{
+                ...state,
+                inputDisabled: false
+            }
 
         default:
             return state;
