@@ -13,8 +13,7 @@ export default {
         
         if (store.getState().gameState.availableCommands.hasOwnProperty(command))
         {
-            
-            setTimeout(store.getState().gameState.availableCommands[command].bind(self), 1);
+            setTimeout(store.getState().gameState.availableCommands[command].func.bind(self), 1);
         }
         else {
             store.dispatch(sendToOutput("bad command"));    

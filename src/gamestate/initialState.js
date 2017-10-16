@@ -2,8 +2,11 @@ import commandEngine from './commandEngine';
 
 export default {
     availableCommands: {
-        'help':  function () {
+        'help': {
+            'func': function () {
             commandEngine.sendToOutput('hahahaha');
+            },
+            'description': 'this is the help command'
         }
     }
 }

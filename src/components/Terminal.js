@@ -8,7 +8,12 @@ class Terminal extends Component {
             <div className="App">
                     <h1> Terminal </h1>
                     <TerminalOutput history={this.props.terminal.history}/>
-                    <TerminalInput disabled = {this.props.terminal.inputDisabled} inputValue={this.props.terminal.inputValue} onEnter= {this.props.inputEntered} />
+                    <TerminalInput 
+                        disabled={this.props.terminal.inputDisabled} 
+                        inputValue={this.props.terminal.inputValue} 
+                        onEnter={this.props.inputEntered} 
+                        availableCommands={Object.keys(this.props.gameState.availableCommands)}
+                    />
                 </div>
         );
     }
