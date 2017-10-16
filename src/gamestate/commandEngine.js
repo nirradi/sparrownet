@@ -13,6 +13,7 @@ var commandEngine = {
     
     start: function(initialState) {
         store.dispatch(pushShell(initialState.rootCommands, '> '))
+        store.dispatch(sendToOutput(initialState.initialOutput));
     },
     
     sendToOutput: function(value, disable=true) {
@@ -40,9 +41,10 @@ var commandEngine = {
     },
    
     showHelp: function(availableCommands) {
+        commandEngine.sendToOutput("action       | Description\r\n--------------------");
         for (var availableCommand in availableCommands) {
             if (availableCommands.hasOwnProperty(availableCommand)) {
-                commandEngine.sendToOutput(availableCommand + " - " + availableCommands[availableCommand].description);        
+                commandEngine.sendToOutput((availableCommand + "                  ").slice(0, 12) + "| " + availableCommands[availableCommand].description);        
             }
         };
     },

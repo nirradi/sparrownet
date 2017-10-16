@@ -4,6 +4,7 @@ import { mailbox } from './common';
 var chapter1 = {
     rootCommands: {
     },
+    initialOutput: "Welcome to sparrownet terminal (v2.14.1)\nImportant*: Your system is not up-to-date. Please speak with your system adminstrator.",
     mails: {
         unread: [
             {
