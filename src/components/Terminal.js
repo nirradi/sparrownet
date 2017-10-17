@@ -3,10 +3,15 @@ import TerminalOutput from './TerminalOutput';
 import TerminalInput from './TerminalInput';
 
 class Terminal extends Component {
+    componentDidUpdate() {
+        var out = document.getElementById("terminal");
+        out.scrollTop = out.scrollHeight - out.clientHeight; 
+    }
     
     render() {
+        
         return (
-            <div className="terminal">
+            <div id="terminal">
                     <TerminalOutput value={this.props.terminal.output}/>
                     <TerminalInput 
                         prompt={this.props.terminal.prompt}
