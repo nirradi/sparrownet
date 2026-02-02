@@ -30,5 +30,4 @@ def test_generate_patch_with_mocked_llm(monkeypatch):
 
     assert isinstance(patch, dict)
     assert "strict" in patch and "vibe" in patch
-    assert patch["strict"]["player"]["x"] == 2
     assert patch["vibe"]["message"] == "A breeze blows the curtain."

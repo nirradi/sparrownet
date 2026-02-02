@@ -3,17 +3,18 @@ import json
 from dataclasses import dataclass, field, asdict
 from typing import Optional, Union
 from copy import deepcopy
+from dataclasses_jsonschema import JsonSchemaMixin
 
 
 @dataclass
-class Clock:
+class Clock(JsonSchemaMixin):
     """Clock state: timezone and current time."""
     timezone: str
     time: str  # HH:MM format
 
 
 @dataclass
-class Event:
+class Event(JsonSchemaMixin):
     """Event with type field.
     
     Types:
@@ -27,7 +28,7 @@ class Event:
 
 
 @dataclass
-class StrictState:
+class StrictState(JsonSchemaMixin):
     """
     Closed-schema state used for win conditions and validation.
     
@@ -135,3 +136,11 @@ def state_from_json(json_str: str) -> GameState:
     )
     
     return GameState(strict=strict, vibe=vibe)
+
+
+def strict_state_schema() -> dict:
+    """
+    Return a JSON schema for StrictState using dataclasses-jsonschema.
+    Useful for LLM prompt context and validation.
+    """
+    return StrictState.json_schema()

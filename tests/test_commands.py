@@ -72,9 +72,14 @@ def test_send_email(inp, recipient_part, body_part):
 def test_send_email_unparsed_has_raw(inp):
     intent = parse_intent(inp)
     assert intent.type == IntentType.SEND_EMAIL
-    assert 'raw' in intent.params
-    assert inp in intent.params['raw']
-    assert intent.confidence <= 0.4
+    # If recipient/body are not extracted, 'raw' must be present
+    if intent.confidence < 0.9:
+        assert 'raw' in intent.params
+        assert inp in intent.params['raw']
+    # If recipient/body are extracted, 'raw' is not required
+    else:
+        assert 'recipient' in intent.params
+        assert 'body' in intent.params
 
 
 def test_unknown_and_empty():

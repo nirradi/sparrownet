@@ -27,6 +27,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from .tools import call_llm, load_model_config, load_prompt
+from engine.state import strict_state_schema
 
 LOG = logging.getLogger(__name__)
 
@@ -152,6 +153,23 @@ def _serialize_state(state: Any) -> Dict[str, Any]:
 	return {"repr": str(state)}
 
 
+
+def _filter_strict_patch(patch: Dict[str, Any], intent: Any) -> Dict[str, Any]:
+    """Filter strict fields from patch to only those allowed by intent.strict_targets."""
+    allowed = set(getattr(intent, 'strict_targets', []))
+    if "strict" in patch and isinstance(patch["strict"], dict):
+        original = set(patch["strict"].keys())
+        filtered = {k: v for k, v in patch["strict"].items() if k in allowed}
+        removed = original - set(filtered.keys())
+        if removed:
+            LOG.debug("Intent %r not allowed to modify strict fields: %r; removing.", getattr(intent, "type", None), list(removed))
+        patch = dict(patch)
+        patch["strict"] = filtered
+    # If no allowed strict targets, ensure strict is empty dict
+    if not allowed:
+        patch["strict"] = {}
+    return patch
+
 def generate_patch(intent: Any, state: Any, level_context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
 	"""Generate a patch dict from `intent` and `state` using an LLM.
 
@@ -169,14 +187,24 @@ def generate_patch(intent: Any, state: Any, level_context: Optional[Dict[str, An
 	# Prepare minimal serializations
 	ser_intent = intent.to_dict() if hasattr(intent, "to_dict") else (intent if isinstance(intent, dict) else {"repr": str(intent)})
 	ser_state = _serialize_state(state)
+	strict_targets = getattr(intent, "strict_targets", [])
+	strict_schema = strict_state_schema()
 
 	# Substitute placeholders directly instead of using .format() to avoid 
 	# interpreting literal braces in the prompt template
 	intent_json = json.dumps(ser_intent)
 	state_json = json.dumps(ser_state)
 	context_json = json.dumps(level_context)
-	
-	prompt = prompt_tpl.replace("{intent}", intent_json).replace("{state}", state_json).replace("{level_context}", context_json)
+	strict_targets_json = json.dumps(strict_targets)
+	strict_schema_json = json.dumps(strict_schema, indent=2)
+
+	# log intent before prompt
+	LOG.debug("Generating patch for intent: %s", intent_json)
+	prompt = prompt_tpl.replace("{intent}", intent_json)\
+		.replace("{state}", state_json)\
+		.replace("{level_context}", context_json)\
+		.replace("{strict_targets}", strict_targets_json)\
+		.replace("{strict_schema}", strict_schema_json)
 
 	# Call the LLM (may raise if client not available)
 	raw = call_llm(prompt, model_cfg)
@@ -208,6 +236,9 @@ def generate_patch(intent: Any, state: Any, level_context: Optional[Dict[str, An
 
 	# Resolve ${intent.<field>} placeholders before returning
 	patch = resolve_intent_placeholders(patch, intent)
+
+	# Filter strict patch to only allowed keys
+	patch = _filter_strict_patch(patch, intent)
 
 	return patch
 

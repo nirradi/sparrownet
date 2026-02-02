@@ -24,7 +24,7 @@ The player takes the role of a new IT employee navigating a corporate network, p
    - `generate_patch(intent, state, level_context)` produces:
      - `strict` patch: authoritative state changes
      - `vibe` patch: flavor text / narrative
-   - Only fields allowed by `intent.modifies_strict` can appear in `strict`
+   - Only fields allowed by `intent.strict_properties` can appear in `strict`
    - Vibe fields are free-form
 
 3. **Patch Application**  

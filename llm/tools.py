@@ -37,27 +37,17 @@ def load_model_config(config_file: Path = Path("config") / "models.dev.yaml", ke
 
 
 def load_prompt(prompt_name: str = "mutate") -> str:
-    """Load a prompt template from `llm/prompts/{prompt_name}.yml` or `.yaml`.
-    Raises RuntimeError if no prompt file is available or parse fails.
+    """Load a prompt template from `llm/prompts/{prompt_name}.yml` as plain text.
+    Raises RuntimeError if no prompt file is available or read fails.
     """
     base = Path("llm") / "prompts" / prompt_name
-    for suf in (".yml", ".yaml"):
-        p = base.with_suffix(suf)
-        try:
-            if p.exists():
-                raw = p.read_text()
-                # Try YAML parse if available
-                try:
-                    import yaml  # type: ignore
-                    parsed = yaml.safe_load(raw)
-                    if isinstance(parsed, dict) and "prompt" in parsed and isinstance(parsed["prompt"], str):
-                        return parsed["prompt"].strip()
-                except Exception:
-                    LOG.debug("PyYAML not available or parse failed for %s", p, exc_info=True)
-                return raw.strip()
-        except Exception:
-            LOG.debug("Failed to read prompt %s", p, exc_info=True)
-    raise RuntimeError(f"Prompt template not found for '{prompt_name}' (looked for {base}.yml/.yaml)")
+    p = base.with_suffix(".txt")
+    try:
+        if p.exists():
+            return p.read_text().strip()
+    except Exception:
+        LOG.debug("Failed to read prompt %s", p, exc_info=True)
+    raise RuntimeError(f"Prompt template not found for '{prompt_name}' (looked for {base}.yml)")
 
 
 def call_llm(prompt: str, model_cfg: Dict[str, Any]) -> Optional[str]:

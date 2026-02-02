@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/game/loop.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
-            "env": {"PYTHONPATH": "${workspaceFolder}"}
+            "env": {"PYTHONPATH": "${workspaceFolder}","LOGLEVEL": "DEBUG"}
         },
         {
             "name": "Mutator Benchmark",

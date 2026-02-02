@@ -26,15 +26,16 @@ from typing import Any, Dict, List
 from engine.state import create_initial_state, state_to_json, copy_state
 from engine.patch import apply_patch
 from llm.mutate import generate_patch
+from game.commands import Intent, IntentType
+
+# these should build proper intents using Intent
 
 
-def build_intent_set_clock(time_str: str = "09:00", timezone: str = "UTC") -> Dict[str, Any]:
-    return {"action": "SET_CLOCK", "time": time_str, "timezone": timezone}
+def build_intent_set_clock(time_str: str = "09:00", timezone: str = "UTC") -> Intent:
+    return Intent(type=IntentType.SET_CLOCK, params={"time": time_str, "timezone": timezone}, confidence=0.9)
 
-
-def build_intent_send_email(recipient: str = "alice@example.com", sent_at: str = "08:30") -> Dict[str, Any]:
-    return {"action": "SEND_EMAIL", "recipient": recipient, "sent_at": sent_at}
-
+def build_intent_send_email(recipient: str = "alice@example.com", sent_at: str = "08:30") -> Intent:
+    return Intent(type=IntentType.SEND_EMAIL, params={"recipient": recipient, "sent_at": sent_at}, confidence=0.9)
 
 def summarize_runs(results: List[Dict[str, Any]], expected_strict_fields: List[str]) -> None:
     total = len(results)

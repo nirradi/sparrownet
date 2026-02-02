@@ -22,11 +22,11 @@ from typing import Any, Dict, Optional
 
 
 class IntentType(Enum):
-	SHOW_CONFIG = auto()
-	SET_CLOCK = auto()
-	READ_EMAIL = auto()
-	SEND_EMAIL = auto()
-	UNKNOWN = auto()
+	SHOW_CONFIG = 1
+	SET_CLOCK = 2
+	READ_EMAIL = 3
+	SEND_EMAIL = 4
+	UNKNOWN = 5
 
 
 @dataclass(frozen=True)
@@ -34,6 +34,18 @@ class Intent:
 	type: IntentType
 	params: Dict[str, Any]
 	confidence: float
+
+
+	@property
+	def strict_targets(self) -> list[str]:
+		"""Return the strict fields this intent can modify."""
+		mapping = {
+			IntentType.SET_CLOCK: ["events", "clock"],
+			IntentType.SEND_EMAIL: ["events"],
+			IntentType.READ_EMAIL: [],
+			IntentType.SHOW_CONFIG: [],
+		}
+		return mapping.get(self.type, [])
 
 
 def _parse_offset_hours(text: str) -> Optional[int]:
