@@ -114,9 +114,11 @@ def parse_intent(user_input: str) -> Intent:
 		offset = _parse_offset_hours(low)
 		if offset is not None:
 			return Intent(IntentType.SET_CLOCK, {'offset_hours': offset}, 0.92)
-		# may be a clock command without explicit offset
+		# If we can't parse offset, still include raw input for downstream use
 		if re.search(r'\bset\b.*\bclock\b', low) or re.search(r'\bset\b.*\bsystem time\b', low):
-			return Intent(IntentType.SET_CLOCK, {}, 0.5)
+			return Intent(IntentType.SET_CLOCK, {'raw': raw}, 0.5)
+		# fallback: if it looks like a clock command but not parseable, still return intent with raw
+		return Intent(IntentType.SET_CLOCK, {'raw': raw}, 0.3)
 
 	# 4) SEND_EMAIL detection
 	if re.search(r'\b(send|email)\b', low):
@@ -125,9 +127,11 @@ def parse_intent(user_input: str) -> Intent:
 			# If recipient present but body empty, body should be empty string
 			return Intent(IntentType.SEND_EMAIL, {'recipient': extract.get('recipient', ''), 'body': extract.get('body', '')}, 0.9)
 		# Could not extract recipient confidently; still classify as send intent but low confidence
-		# Use the whole input as body when recipient missing
+		# Always include raw input for downstream/fallback LLM
 		if 'send' in low:
-			return Intent(IntentType.SEND_EMAIL, {'recipient': '', 'body': raw}, 0.4)
+			return Intent(IntentType.SEND_EMAIL, {'recipient': '', 'body': raw, 'raw': raw}, 0.4)
+		# fallback: if it looks like an email command but not parseable, still return intent with raw
+		return Intent(IntentType.SEND_EMAIL, {'raw': raw}, 0.3)
 
 	# Unknown intent
 	return Intent(IntentType.UNKNOWN, {}, 0.0)
