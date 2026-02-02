@@ -14,14 +14,34 @@
             "env": {"PYTHONPATH": "${workspaceFolder}","LOGLEVEL": "DEBUG"}
         },
         {
-            "name": "Mutator Benchmark",
+            "name": "Mutator set_clock Benchmark",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/scripts/bench_mutator.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {"PYTHONPATH": "${workspaceFolder}"},
-            "args": ["--intent", "set_clock", "--runs", "10", "--dump", "bench_results.json"]
+            "args": ["--intent", "set_clock", "--runs", "10", "--dump", "set_clock_bench_results.json"]
+        },
+        {
+            "name": "Mutator send_email Benchmark",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/bench_mutator.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {"PYTHONPATH": "${workspaceFolder}"},
+            "args": ["--intent", "send_email", "--runs", "10", "--dump", "send_email_bench_results.json"]
+        },
+        {
+            "name": "Narrator Benchmark",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/bench_narrator.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {"PYTHONPATH": "${workspaceFolder}"},
+            "args": ["--runs", "10", "--dump", "narrator_bench_results.json"]
         }
     ]
 }

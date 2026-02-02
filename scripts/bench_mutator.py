@@ -99,7 +99,7 @@ def run_benchmark(intent_name: str, runs: int, dump: Path | None) -> None:
         expected = ["clock"]
     elif intent_name == "send_email":
         intent = build_intent_send_email()
-        expected = ["events"]
+        expected = ["emails"]
     else:
         # default: use set_clock
         intent = build_intent_set_clock()

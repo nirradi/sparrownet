@@ -29,12 +29,23 @@ prompt: |
 # Example: SEND_EMAIL (allowed strict: ["events"])
 ---
 intent: {"type": "SEND_EMAIL", "params": {"recipient": "ops@corp", "body": "System rebooted."}, "confidence": 0.9}
+state: {"clock": {"timezone": "UTC", "time": "10:00"}, "emails": []}
+level_context: {}
+strict_targets: ["events"]
+output:
+   strict:
+      emails:
+         - {"recipient": "ops@corp", "sent_at": "10:00"}
+   vibe:
+      email_content: "System rebooted."   
+
+intent: {"type": "SET_CLOCK", "params": {"time: 00:23"}, "confidence": 0.9}
 state: {"clock": {"timezone": "UTC", "time": "10:00"}, "events": []}
 level_context: {}
 strict_targets: ["events"]
 output:
    strict:
-      events:
-         - {"type": "player_sent_email", "recipient": "ops@corp", "sent_at": "10:00"}
+      clock:
+         - {"timezone": "UTC", "time": "00:23"}
    vibe:
-      email_content: "System rebooted."   
+      logs: "User Set Clock"

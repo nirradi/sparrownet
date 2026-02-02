@@ -1,48 +1,107 @@
 [
   {
     "index": 1,
-    "duration": 8.822919845581055,
-    "raw_patch": {},
-    "apply_result": null
+    "duration": 6.358849048614502,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "ops@corp"
+          }
+        ]
+      },
+      "vibe": {
+        "email_content": "System rebooted."
+      }
+    },
+    "apply_result": {
+      "success": false,
+      "strict_errors": [
+        {
+          "field": "emails[0]",
+          "reason": "recipient must be a valid email address",
+          "attempted_value": {
+            "recipient": "ops@corp"
+          }
+        }
+      ],
+      "warnings": []
+    }
   },
   {
     "index": 2,
-    "duration": 1.2329928874969482,
+    "duration": 2.1737940311431885,
     "raw_patch": {
       "strict": {
-        "clock": {
-          "timezone": "UTC",
-          "time": "09:00"
-        }
+        "emails": [
+          {
+            "recipient": "ops@corp",
+            "sent_at": "08:30"
+          }
+        ]
       },
-      "vibe": {}
+      "vibe": {
+        "message": "An email was sent successfully"
+      }
     },
     "apply_result": {
-      "success": true,
-      "strict_errors": [],
+      "success": false,
+      "strict_errors": [
+        {
+          "field": "emails[0]",
+          "reason": "recipient must be a valid email address",
+          "attempted_value": {
+            "recipient": "ops@corp",
+            "sent_at": "08:30"
+          }
+        }
+      ],
       "warnings": []
     }
   },
   {
     "index": 3,
-    "duration": 2.343528985977173,
-    "raw_patch": {},
-    "apply_result": null
+    "duration": 1.6365749835968018,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "ops@corp"
+          }
+        ]
+      },
+      "vibe": {
+        "email_content": "System rebooted."
+      }
+    },
+    "apply_result": {
+      "success": false,
+      "strict_errors": [
+        {
+          "field": "emails[0]",
+          "reason": "recipient must be a valid email address",
+          "attempted_value": {
+            "recipient": "ops@corp"
+          }
+        }
+      ],
+      "warnings": []
+    }
   },
   {
     "index": 4,
-    "duration": 2.062614917755127,
+    "duration": 2.502082109451294,
     "raw_patch": {
       "strict": {
-        "clock": {
-          "timezone": "UTC",
-          "time": "09:00"
-        }
+        "emails": [
+          {
+            "recipient": "alice@example.com"
+          }
+        ]
       },
       "vibe": {
-        "system_config": {},
-        "emails": [],
-        "notes": []
+        "message": "An action completed successfully",
+        "logs": "Intent type: SEND_EMAIL, confidence: 0.9"
       }
     },
     "apply_result": {
@@ -53,15 +112,14 @@
   },
   {
     "index": 5,
-    "duration": 1.5034089088439941,
+    "duration": 32.05189299583435,
     "raw_patch": {
       "strict": {
-        "clock": {
-          "time": "09:00",
-          "timezone": "UTC"
-        }
+        "emails": []
       },
-      "vibe": {}
+      "vibe": {
+        "message": "An action completed successfully"
+      }
     },
     "apply_result": {
       "success": true,
@@ -71,19 +129,17 @@
   },
   {
     "index": 6,
-    "duration": 1.940445899963379,
+    "duration": 1.8130409717559814,
     "raw_patch": {
       "strict": {
-        "clock": {
-          "timezone": "UTC",
-          "time": "09:00"
-        }
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
       },
-      "vibe": {
-        "system_config": {},
-        "emails": [],
-        "notes": []
-      }
+      "vibe": {}
     },
     "apply_result": {
       "success": true,
@@ -93,30 +149,46 @@
   },
   {
     "index": 7,
-    "duration": 2.0670390129089355,
+    "duration": 1.4137969017028809,
     "raw_patch": {
       "strict": {
-        "clock": {
-          "timezone": null,
-          "time": "09:00"
-        }
+        "emails": [
+          {
+            "recipient": "alice@example.com"
+          }
+        ]
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 8,
+    "duration": 8.081876993179321,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "ops@corp"
+          }
+        ]
       },
       "vibe": {
-        "system_config": {
-          "language": "English",
-          "difficulty": "Easy"
-        }
+        "message": "An action completed successfully"
       }
     },
     "apply_result": {
       "success": false,
       "strict_errors": [
         {
-          "field": "clock",
-          "reason": "timezone must be a string",
+          "field": "emails[0]",
+          "reason": "recipient must be a valid email address",
           "attempted_value": {
-            "timezone": null,
-            "time": "09:00"
+            "recipient": "ops@corp"
           }
         }
       ],
@@ -124,58 +196,45 @@
     }
   },
   {
-    "index": 8,
-    "duration": 1.7445149421691895,
-    "raw_patch": {
-      "strict": {
-        "clock": {
-          "timezone": "UTC",
-          "time": "09:00"
-        }
-      },
-      "vibe": {
-        "message": "It's time to shine!"
-      }
-    },
-    "apply_result": {
-      "success": true,
-      "strict_errors": [],
-      "warnings": []
-    }
-  },
-  {
     "index": 9,
-    "duration": 1.9004616737365723,
+    "duration": 8.063591957092285,
     "raw_patch": {
       "strict": {
-        "clock": {
-          "time": "09:00",
-          "timezone": "UTC"
-        }
+        "emails": [
+          {
+            "recipient": "ops@corp"
+          }
+        ]
       },
       "vibe": {
-        "system_config": {},
-        "emails": [],
-        "notes": []
+        "message": "An action completed successfully",
+        "email_content": "System rebooted."
       }
     },
     "apply_result": {
-      "success": true,
-      "strict_errors": [],
+      "success": false,
+      "strict_errors": [
+        {
+          "field": "emails[0]",
+          "reason": "recipient must be a valid email address",
+          "attempted_value": {
+            "recipient": "ops@corp"
+          }
+        }
+      ],
       "warnings": []
     }
   },
   {
     "index": 10,
-    "duration": 1.328843116760254,
+    "duration": 1.3838210105895996,
     "raw_patch": {
       "strict": {
-        "clock": {
-          "timezone": "UTC",
-          "time": "09:00"
-        }
+        "emails": []
       },
-      "vibe": {}
+      "vibe": {
+        "message": "An email was sent successfully"
+      }
     },
     "apply_result": {
       "success": true,

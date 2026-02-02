@@ -1,1 +1,18 @@
-# Narrate prompt configuration
+
+# Narrator LLM prompt template
+# Style: terse, in-universe, sysadmin terminal
+# No meta, no emojis, no explanations
+#
+# Variables:
+#   {intent_type} - the command type
+#   {success} - true/false
+#   {errors} - error messages (if any)
+#   {patch} - patch details (if any)
+
+The user issued a {intent_type} command.
+The operation {'succeeded' if success else 'failed'}.
+{%- if errors %}
+{% for err in errors %}Error: {{ err }}\n{% endfor %}{% endif %}
+{%- if patch %}
+{% for k, v in patch.items() %}{{ k }}: {{ v }}\n{% endfor %}{% endif %}
+Generate the terminal response.

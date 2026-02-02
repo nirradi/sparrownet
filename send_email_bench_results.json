@@ -1,0 +1,216 @@
+[
+  {
+    "index": 1,
+    "duration": 3.86234712600708,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "ops@corp",
+            "sent_at": "10:00"
+          }
+        ]
+      },
+      "vibe": {
+        "email_content": "System rebooted."
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 2,
+    "duration": 2.229639768600464,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
+      },
+      "vibe": {
+        "system_config": {},
+        "emails": [],
+        "notes": []
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 3,
+    "duration": 1.7526237964630127,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 4,
+    "duration": 1.6225337982177734,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 5,
+    "duration": 1.696000099182129,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 6,
+    "duration": 2.1897048950195312,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
+      },
+      "vibe": {
+        "system_config": {},
+        "notes": []
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 7,
+    "duration": 2.0243709087371826,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "ops@corp",
+            "sent_at": "10:00"
+          }
+        ]
+      },
+      "vibe": {
+        "email_content": "System rebooted."
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 8,
+    "duration": 2.370755672454834,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 9,
+    "duration": 2.165743112564087,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
+      },
+      "vibe": {
+        "system_config": {},
+        "notes": []
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 10,
+    "duration": 3.5452489852905273,
+    "raw_patch": {
+      "strict": {
+        "emails": [
+          {
+            "recipient": "alice@example.com",
+            "sent_at": "08:30"
+          }
+        ]
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  }
+]

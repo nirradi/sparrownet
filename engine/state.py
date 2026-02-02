@@ -3,7 +3,9 @@ import json
 from dataclasses import dataclass, field, asdict
 from typing import Optional, Union
 from copy import deepcopy
+
 from dataclasses_jsonschema import JsonSchemaMixin
+
 
 
 @dataclass
@@ -14,17 +16,10 @@ class Clock(JsonSchemaMixin):
 
 
 @dataclass
-class Event(JsonSchemaMixin):
-    """Event with type field.
-    
-    Types:
-    - "player_changed_clock": clock was changed (has changed_at)
-    - "player_sent_email": email was sent (has recipient, sent_at)
-    """
-    type: str  # "player_changed_clock" or "player_sent_email"
-    changed_at: Optional[str] = None  # HH:MM format for player_changed_clock
-    recipient: Optional[str] = None   # For player_sent_email
-    sent_at: Optional[str] = None     # HH:MM format for player_sent_email
+class Email(JsonSchemaMixin):
+    """Email with recipient field."""
+    recipient: str
+    sent_at: Optional[str] = None  # Optional sent_at time in HH:MM
 
 
 @dataclass
@@ -35,7 +30,7 @@ class StrictState(JsonSchemaMixin):
     No dynamic keys allowed. Structure is fixed and enforced.
     """
     clock: Clock
-    events: list[Event] = field(default_factory=list)
+    emails: list[Email] = field(default_factory=list)
 
 
 @dataclass
@@ -68,12 +63,11 @@ def create_initial_state() -> GameState:
     return GameState(
         strict=StrictState(
             clock=Clock(timezone="UTC", time="00:00"),
-            events=[]
+            emails=[]
         ),
         vibe=VibeState(
             system_config={},
             emails=[],
-            notes=[]
         )
     )
 
@@ -126,7 +120,7 @@ def state_from_json(json_str: str) -> GameState:
             timezone=data["strict"]["clock"]["timezone"],
             time=data["strict"]["clock"]["time"]
         ),
-        events=data["strict"]["events"]
+        emails=[Email(**email) for email in data["strict"].get("emails", [])]
     )
     
     vibe = VibeState(
@@ -140,7 +134,7 @@ def state_from_json(json_str: str) -> GameState:
 
 def strict_state_schema() -> dict:
     """
-    Return a JSON schema for StrictState using dataclasses-jsonschema.
+    Return a JSON schema for StrictState.
     Useful for LLM prompt context and validation.
     """
     return StrictState.json_schema()

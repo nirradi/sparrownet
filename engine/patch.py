@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Any, Optional
 from copy import deepcopy
 
-from engine.state import GameState, StrictState, VibeState, Clock, Event
+from engine.state import Email, GameState, StrictState, VibeState, Clock
 
 
 # Type alias for a patch dictionary
@@ -103,29 +103,9 @@ def _validate_email_sent(value: Any) -> tuple[bool, Optional[str]]:
     if not isinstance(recipient, str):
         return False, "recipient must be a string"
     
-    # Basic email validation
-    if "@" not in recipient or "." not in recipient.split("@")[-1]:
-        return False, "recipient must be a valid email address"
-    
+    # check for sent_at field
     if "sent_at" not in value:
         return False, "sent_at is required"
-    
-    sent_at = value["sent_at"]
-    if not isinstance(sent_at, str):
-        return False, "sent_at must be a string"
-    
-    # Basic HH:MM format check
-    if len(sent_at) != 5 or sent_at[2] != ":":
-        return False, "sent_at must be in HH:MM format"
-    
-    try:
-        hour, minute = sent_at.split(":")
-        h = int(hour)
-        m = int(minute)
-        if not (0 <= h <= 23) or not (0 <= m <= 59):
-            return False, "sent_at out of bounds"
-    except ValueError:
-        return False, "sent_at components must be numeric"
     
     return True, None
 
@@ -211,76 +191,40 @@ def _apply_strict_patch(
             
             updated.clock = Clock(timezone=new_tz, time=new_time)
     
-    # Validate and apply events patch
-    if "events" in patch_dict:
-        events_patch = patch_dict["events"]
+    # Validate and apply emails patch
+    if "emails" in patch_dict:
+        emails_patch = patch_dict["emails"]
         
-        if not isinstance(events_patch, list):
+        if not isinstance(emails_patch, list):
             errors.append(
                 ValidationError(
-                    field="events",
-                    reason="events must be a list",
-                    attempted_value=events_patch
+                    field="emails",
+                    reason="emails must be a list",
+                    attempted_value=emails_patch
                 )
             )
         else:
             # Validate each event in the list
-            valid_events = []
-            for idx, event in enumerate(events_patch):
-                if not isinstance(event, dict):
+            valid_emails = []
+            for idx, email in enumerate(emails_patch):
+                
+                # Validate email event (must have recipient only)
+                is_valid, error_msg = _validate_email_sent(email)
+                if not is_valid:
                     errors.append(
                         ValidationError(
-                            field=f"events[{idx}]",
-                            reason="event must be a dict",
-                            attempted_value=event
+                            field=f"emails[{idx}]",
+                            reason=error_msg,
+                            attempted_value=email
                         )
                     )
-                    continue
-                
-                # Check event type
-                event_type = event.get("type")
-                if event_type not in ("player_changed_clock", "player_sent_email"):
-                    errors.append(
-                        ValidationError(
-                            field=f"events[{idx}]",
-                            reason="type must be 'player_changed_clock' or 'player_sent_email'",
-                            attempted_value=event
-                        )
-                    )
-                    continue
-                
-                # Validate based on type
-                if event_type == "player_changed_clock":
-                    is_valid, error_msg = _validate_clock_change(event)
-                    if not is_valid:
-                        errors.append(
-                            ValidationError(
-                                field=f"events[{idx}]",
-                                reason=error_msg,
-                                attempted_value=event
-                            )
-                        )
-                    else:
-                        event_obj = Event(type="player_changed_clock", changed_at=event["changed_at"])
-                        valid_events.append(event_obj)
-                
-                elif event_type == "player_sent_email":
-                    is_valid, error_msg = _validate_email_sent(event)
-                    if not is_valid:
-                        errors.append(
-                            ValidationError(
-                                field=f"events[{idx}]",
-                                reason=error_msg,
-                                attempted_value=event
-                            )
-                        )
-                    else:
-                        event_obj = Event(type="player_sent_email", recipient=event["recipient"], sent_at=event["sent_at"])
-                        valid_events.append(event_obj)
+                else:
+                    event_obj = Email(recipient=email["recipient"], sent_at=email["sent_at"])
+                    valid_emails.append(event_obj)
             
-            # Only update events if no errors were found
+            # Only update emails if no errors were found
             if not errors:
-                updated.events = valid_events
+                updated.emails = valid_emails
     
     return updated, errors
 
@@ -354,7 +298,7 @@ def apply_patch(state: GameState, patch: Patch) -> PatchResult:
         patch = {
             "strict": {
                 "clock": {"time": "09:00"},
-                "events": [{"recipient": "admin@example.com", "sent_at": "08:30"}]
+                "emails": [{"recipient": "admin@example.com"}]
             },
             "vibe": {
                 "notes": ["User felt clever"]
