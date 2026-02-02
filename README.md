@@ -1,147 +1,77 @@
-# Sparrow Net Game
+# Sparrow Net Game — AI Terminal Puzzle Game
 
-Sparrow Net is a terminal-style, AI-assisted puzzle game.
-The player is an IT employee interacting with a remote system via a constrained, fake terminal.
-The game is chapter-based, with each level being a deterministic puzzle wrapped in narrative flavor.
+## Game Overview
 
-The core design goal:
-- Feels like a terminal
-- Plays like a puzzle game
-- Uses LLMs for interpretation and flavor, not authority
+Sparrow Net Game is a terminal-style puzzle adventure.  
+The player takes the role of a new IT employee navigating a corporate network, performing IT tasks while uncovering hidden nefarious activity.  
 
----
-
-## Core Design Principles
-
-### 1. Determinism First
-- Every level has a clear, testable win condition.
-- The game engine, not the LLM, decides correctness.
-- LLMs may propose changes, but the engine validates and applies them.
-
-### 2. Fake Terminal, Not Chatbot
-- Input is command-like, not conversational.
-- Commands are constrained and finite.
-- Errors are mechanical and explicit.
-
-### 3. LLMs as Parsers and Proposers
-- LLMs interpret input and propose state changes.
-- LLMs never decide outcomes.
-- LLMs never mutate state directly.
+### Chapters & Levels
+- The game is divided into **chapters**, each containing **levels**.
+- Each level is a multi-step puzzle with clear **win conditions**.
+- Some narrative choices can alter story flow (choose-your-own-adventure elements).
 
 ---
 
-## Game Loop Overview
+## Core Architecture
 
-High-level flow for every user input:
+### Entities in the Main Loop
 
-User Input
-→ Intent Resolution
-→ Patch Proposal (LLM)
-→ Patch Validation (Engine)
-→ State Mutation
-→ Win Condition Check
-→ Output Rendering (LLM)
+1. **User Input**  
+   - Commands typed into the terminal  
+   - Parsed into structured **Intent objects**
 
+2. **Intent -> Patch (LLM mutator)**  
+   - `generate_patch(intent, state, level_context)` produces:
+     - `strict` patch: authoritative state changes
+     - `vibe` patch: flavor text / narrative
+   - Only fields allowed by `intent.modifies_strict` can appear in `strict`
+   - Vibe fields are free-form
 
-Each step is explicit and logged.
+3. **Patch Application**  
+   - Engine applies patches to **GameState** (`engine.patch.apply_patch`)
+   - Enforces:
+     - strict validation rules
+     - authoritative state update
+   - Any invalid patch is rejected; the engine remains the source of truth
 
----
+4. **Output Generation**  
+   - Strict fields update game state  
+   - Vibe fields generate terminal text for player feedback
 
-## State Model
-
-Game state is split into two zones:
-
-### Strict State
-- Small, closed schema.
-- Used for win conditions.
-- Fully validated.
-- Deterministic.
-
-Examples:
-- system clock
-- event timestamps
-- facts required for puzzle completion
-
-### Vibe State
-- Free-form, realism-only.
-- No win conditions depend on it.
-- Exists to sell the world.
-
-Examples:
-- emails
-- system configuration noise
-- files, notes, logs
-
-**Strict and Vibe must never mix.**
+5. **State Inspection**  
+   - Check for win conditions, level advancement
 
 ---
 
-## Intents
+## Patch Philosophy
 
-User input is classified into a small, fixed set of intents.
-
-Examples:
-- CLOCK_STATUS
-- CLOCK_SET
-- SYS_SHOW
-- MAIL_READ
-- MAIL_SEND
-
-Intents:
-- Define what kind of action the user is attempting
-- Control which parts of state may be affected
-- Gate what patches are allowed
+- **Strict:** minimal, precise, validated; LLM cannot hallucinate  
+- **Vibe:** flexible, narrative-driven, safe to hallucinate  
+- **No-ops:** Intents that do not modify strict state produce empty strict patches, only vibe outputs  
 
 ---
 
-## Patch-Based State Mutation
+## Developer Guidelines
 
-LLMs do not mutate state.
-They produce **patch proposals**.
-
-A patch:
-- Is a list of path → value updates
-- May only touch paths allowed by the intent
-- Uses placeholders like `"NOW"` for engine-resolved values
-
-The engine:
-- Validates patches
-- Resolves placeholders
-- Applies accepted patches
-- Rejects invalid ones deterministically
+- **Mutator switching:** Use config flag `USE_LLM` to toggle between stub and LLM mutator  
+- **Intent self-description:** Each Intent object declares if it modifies strict fields  
+- **Benchmarks:** Run `tests/benchmark_mutator.py` to measure LLM patch reliability and convergence  
+- **Post-processing:** LLM output placeholders like `${intent.time}` are resolved before patch application  
 
 ---
 
-## Time and Events
+## Design Principles
 
-- The engine is the sole authority on time.
-- LLMs may request `"NOW"` but never invent timestamps.
-- Temporal logic (ordering of actions) lives in strict state as event facts.
-
----
-
-## What This Repository Is (for now)
-
-- A prototype engine
-- A testbed for the intent → patch → validation model
-- Focused on correctness and debuggability
-
-## What This Repository Is Not (yet)
-
-- A full OS simulation
-- A natural-language chatbot
-- A branching narrative engine
-
-Those may come later if the foundation proves solid.
+- Engine is **authoritative**; LLM only proposes  
+- Keep LLM creativity **contained** (strict vs vibe)  
+- No direct state mutation outside engine  
+- Benchmarks and intent-aware filtering prevent cascading failures  
 
 ---
 
-## Development Phases (Current)
+## Next Steps (for future development)
 
-- Phase 1: State model (strict / vibe split)
-- Phase 2: Patch schema and validation
-- Phase 3: Intent system
-- Phase 4: Game loop
-- Phase 5: LLM integration
-
-Each phase should leave the game runnable.
+- LLM-generated vibe text for immersive terminal output  
+- Per-level context and prompt tuning  
+- Support multiple intents per turn  
+- Logging and replay for debugging
