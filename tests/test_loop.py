@@ -7,7 +7,7 @@ from game.loop import main
 
 
 def test_full_game_loop_sequence_via_main():
-    """End-to-end test: run the actual main() loop through win condition."""
+    """End-to-end test: run the actual main() loop through win condition using stub mutator."""
     
     # Simulate user input: show config, read email, set clock, send email, then exit
     user_inputs = [
@@ -28,7 +28,8 @@ def test_full_game_loop_sequence_via_main():
     with patch('builtins.input', side_effect=mock_input):
         with patch('sys.stdout', output):
             try:
-                main()
+                # Use stub mutator for deterministic test behavior
+                main(mutator_type="stub")
             except StopIteration:
                 # Expected: we ran out of inputs
                 pass

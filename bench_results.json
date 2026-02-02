@@ -1,0 +1,186 @@
+[
+  {
+    "index": 1,
+    "duration": 8.822919845581055,
+    "raw_patch": {},
+    "apply_result": null
+  },
+  {
+    "index": 2,
+    "duration": 1.2329928874969482,
+    "raw_patch": {
+      "strict": {
+        "clock": {
+          "timezone": "UTC",
+          "time": "09:00"
+        }
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 3,
+    "duration": 2.343528985977173,
+    "raw_patch": {},
+    "apply_result": null
+  },
+  {
+    "index": 4,
+    "duration": 2.062614917755127,
+    "raw_patch": {
+      "strict": {
+        "clock": {
+          "timezone": "UTC",
+          "time": "09:00"
+        }
+      },
+      "vibe": {
+        "system_config": {},
+        "emails": [],
+        "notes": []
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 5,
+    "duration": 1.5034089088439941,
+    "raw_patch": {
+      "strict": {
+        "clock": {
+          "time": "09:00",
+          "timezone": "UTC"
+        }
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 6,
+    "duration": 1.940445899963379,
+    "raw_patch": {
+      "strict": {
+        "clock": {
+          "timezone": "UTC",
+          "time": "09:00"
+        }
+      },
+      "vibe": {
+        "system_config": {},
+        "emails": [],
+        "notes": []
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 7,
+    "duration": 2.0670390129089355,
+    "raw_patch": {
+      "strict": {
+        "clock": {
+          "timezone": null,
+          "time": "09:00"
+        }
+      },
+      "vibe": {
+        "system_config": {
+          "language": "English",
+          "difficulty": "Easy"
+        }
+      }
+    },
+    "apply_result": {
+      "success": false,
+      "strict_errors": [
+        {
+          "field": "clock",
+          "reason": "timezone must be a string",
+          "attempted_value": {
+            "timezone": null,
+            "time": "09:00"
+          }
+        }
+      ],
+      "warnings": []
+    }
+  },
+  {
+    "index": 8,
+    "duration": 1.7445149421691895,
+    "raw_patch": {
+      "strict": {
+        "clock": {
+          "timezone": "UTC",
+          "time": "09:00"
+        }
+      },
+      "vibe": {
+        "message": "It's time to shine!"
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 9,
+    "duration": 1.9004616737365723,
+    "raw_patch": {
+      "strict": {
+        "clock": {
+          "time": "09:00",
+          "timezone": "UTC"
+        }
+      },
+      "vibe": {
+        "system_config": {},
+        "emails": [],
+        "notes": []
+      }
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  },
+  {
+    "index": 10,
+    "duration": 1.328843116760254,
+    "raw_patch": {
+      "strict": {
+        "clock": {
+          "timezone": "UTC",
+          "time": "09:00"
+        }
+      },
+      "vibe": {}
+    },
+    "apply_result": {
+      "success": true,
+      "strict_errors": [],
+      "warnings": []
+    }
+  }
+]

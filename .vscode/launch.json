@@ -12,6 +12,16 @@
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {"PYTHONPATH": "${workspaceFolder}"}
+        },
+        {
+            "name": "Mutator Benchmark",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/bench_mutator.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "env": {"PYTHONPATH": "${workspaceFolder}"},
+            "args": ["--intent", "set_clock", "--runs", "10", "--dump", "bench_results.json"]
         }
     ]
 }
