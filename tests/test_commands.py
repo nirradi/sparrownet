@@ -28,6 +28,19 @@ def test_set_clock_with_offset(inp, expected):
     assert 0.5 <= intent.confidence <= 1.0
 
 
+@pytest.mark.parametrize("inp", [
+    "set clock to banana",
+    "set system time to mars",
+    "clock set to ???",
+])
+def test_set_clock_unparsed_has_raw(inp):
+    intent = parse_intent(inp)
+    assert intent.type == IntentType.SET_CLOCK
+    assert 'raw' in intent.params
+    assert inp in intent.params['raw']
+    assert intent.confidence <= 0.5
+
+
 @pytest.mark.parametrize("inp", ["read email", "open inbox", "inbox"])
 def test_read_email(inp):
     intent = parse_intent(inp)
@@ -49,6 +62,19 @@ def test_send_email(inp, recipient_part, body_part):
     assert recipient_part in recipient or recipient_part == recipient
     assert body_part in body
     assert 0.3 <= intent.confidence <= 1.0
+
+
+@pytest.mark.parametrize("inp", [
+    "send email about the weather",
+    "email just a note",
+    "send email banana",
+])
+def test_send_email_unparsed_has_raw(inp):
+    intent = parse_intent(inp)
+    assert intent.type == IntentType.SEND_EMAIL
+    assert 'raw' in intent.params
+    assert inp in intent.params['raw']
+    assert intent.confidence <= 0.4
 
 
 def test_unknown_and_empty():

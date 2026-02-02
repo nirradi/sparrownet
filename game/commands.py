@@ -109,18 +109,7 @@ def parse_intent(user_input: str) -> Intent:
 	if re.search(r'\b(open|read|show)\b.*\b(mail|email|inbox)\b', low) or low in {'inbox'}:
 		return Intent(IntentType.READ_EMAIL, {}, 0.9)
 
-	# 3) SET_CLOCK detection
-	if 'clock' in low or 'system time' in low or 'utc' in low or 'gmt' in low:
-		offset = _parse_offset_hours(low)
-		if offset is not None:
-			return Intent(IntentType.SET_CLOCK, {'offset_hours': offset}, 0.92)
-		# If we can't parse offset, still include raw input for downstream use
-		if re.search(r'\bset\b.*\bclock\b', low) or re.search(r'\bset\b.*\bsystem time\b', low):
-			return Intent(IntentType.SET_CLOCK, {'raw': raw}, 0.5)
-		# fallback: if it looks like a clock command but not parseable, still return intent with raw
-		return Intent(IntentType.SET_CLOCK, {'raw': raw}, 0.3)
-
-	# 4) SEND_EMAIL detection
+	# 3) SEND_EMAIL detection (must come before SET_CLOCK to avoid misclassifying emails mentioning 'clock')
 	if re.search(r'\b(send|email)\b', low):
 		extract = _extract_send_email(raw)
 		if extract:
@@ -132,6 +121,17 @@ def parse_intent(user_input: str) -> Intent:
 			return Intent(IntentType.SEND_EMAIL, {'recipient': '', 'body': raw, 'raw': raw}, 0.4)
 		# fallback: if it looks like an email command but not parseable, still return intent with raw
 		return Intent(IntentType.SEND_EMAIL, {'raw': raw}, 0.3)
+
+	# 4) SET_CLOCK detection
+	if 'clock' in low or 'system time' in low or 'utc' in low or 'gmt' in low:
+		offset = _parse_offset_hours(low)
+		if offset is not None:
+			return Intent(IntentType.SET_CLOCK, {'offset_hours': offset}, 0.92)
+		# If we can't parse offset, still include raw input for downstream use
+		if re.search(r'\bset\b.*\bclock\b', low) or re.search(r'\bset\b.*\bsystem time\b', low):
+			return Intent(IntentType.SET_CLOCK, {'raw': raw}, 0.5)
+		# fallback: if it looks like a clock command but not parseable, still return intent with raw
+		return Intent(IntentType.SET_CLOCK, {'raw': raw}, 0.3)
 
 	# Unknown intent
 	return Intent(IntentType.UNKNOWN, {}, 0.0)
