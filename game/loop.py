@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 from dataclasses import asdict
 from typing import Optional
 
@@ -18,6 +19,18 @@ from game.commands import parse_intent, IntentType
 from game.mutate import get_mutator
 
 LOG = logging.getLogger(__name__)
+
+# Configure root logger from environment so modules like `llm.mutate`
+# emitting DEBUG logs are visible when `LOGLEVEL=DEBUG` is set.
+_loglevel = os.getenv("LOGLEVEL", "INFO").upper()
+try:
+	_level = getattr(logging, _loglevel, logging.INFO)
+except Exception:
+	_level = logging.INFO
+logging.basicConfig(level=_level, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+# Silence overly noisy httpcore/httpx loggers which clutter output
+for _n in ("httpcore.http11", "httpcore.connection", "httpx"):
+	logging.getLogger(_n).setLevel(logging.WARNING)
 
 
 def generate_patch_from_intent(intent, state: state_mod.GameState) -> Optional[dict]:
